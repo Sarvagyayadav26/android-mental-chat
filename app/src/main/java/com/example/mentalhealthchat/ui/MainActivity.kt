@@ -1,28 +1,32 @@
-package com.example.mentalhealthchat.com.example.mentalhealthchat.ui
+package com.example.mentalhealthchat.ui
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import com.example.mentalhealthchat.ui.theme.MentalHealthChatTheme
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import com.example.mentalhealthchat.R
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MentalHealthChatTheme {
-                GreetingScreen()
+        setContentView(R.layout.activity_main)  // <-- THIS USES XML
+
+        val chatBox = findViewById<TextView>(R.id.chatBox)
+        val userInput = findViewById<EditText>(R.id.inputMsg)
+        val sendButton = findViewById<Button>(R.id.sendBtn)
+
+
+        chatBox.text = "Welcome to Mental Health Chat App!"
+
+        sendButton.setOnClickListener {
+            val message = userInput.text.toString().trim()
+
+            if (message.isNotEmpty()) {
+                chatBox.append("\nYou: $message")
+                userInput.text.clear()
+                chatBox.append("\nBot: This is a sample response!")
             }
         }
     }
-}
-
-@Composable
-fun GreetingScreen() {
-    Text(
-        text = "Hello from Mental Health Chat App!",
-        style = MaterialTheme.typography.titleLarge
-    )
 }
