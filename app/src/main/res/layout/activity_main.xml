@@ -3,37 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/bg">
 
     <ScrollView
+        android:id="@+id/chatScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/chatBox"
+        <LinearLayout
+            android:id="@+id/chatContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:orientation="vertical">
+        </LinearLayout>
+
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/inputMsg"
+            android:id="@+id/inputBox"
+            android:hint="Type message..."
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type your message" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg"
+            android:padding="12dp" />
 
         <Button
             android:id="@+id/sendBtn"
+            android:text="Send"
+            android:layout_marginLeft="10dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>
