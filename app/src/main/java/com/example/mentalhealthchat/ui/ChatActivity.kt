@@ -1,5 +1,6 @@
 package com.example.mentalhealthchat.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -28,6 +29,20 @@ class ChatActivity : AppCompatActivity() {
         sendBtn = findViewById(R.id.sendBtn)
         scrollView = findViewById(R.id.chatScroll)
 
+        // 🔥 ADD LOGOUT BUTTON
+        val logoutBtn = findViewById<Button>(R.id.logoutBtn)
+        logoutBtn.setOnClickListener {
+            // Clear saved login data
+            getSharedPreferences("app", MODE_PRIVATE)
+                .edit()
+                .remove("email")
+                .apply()
+
+            // Redirect to login screen
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
         // Get email from shared preferences
         val email = getSharedPreferences("app", MODE_PRIVATE)
             .getString("email", null)
@@ -55,7 +70,7 @@ class ChatActivity : AppCompatActivity() {
                     response: Response<ChatResponse>
                 ) {
                     val res = response.body()
-                    val botReply = res?.reply  ?: "Error: No reply"
+                    val botReply = res?.reply ?: "Error: No reply"
 
                     chatBox.append("\nBot: $botReply\n")
                     scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
