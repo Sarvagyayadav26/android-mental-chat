@@ -8,10 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mentalhealthchat.R
-import com.example.mentalhealthchat.ui.ChatRequest
-import com.example.mentalhealthchat.ui.ChatResponse
-import com.example.mentalhealthchat.ui.RetrofitClient
-import com.example.mentalhealthchat.ui.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +26,7 @@ class ChatActivity : AppCompatActivity() {
         chatBox = findViewById(R.id.chatBox)
         inputBox = findViewById(R.id.inputBox)
         sendBtn = findViewById(R.id.sendBtn)
-        scrollView = findViewById(R.id.chatScroll)  // ADD THIS ID IN XML (shown below)
+        scrollView = findViewById(R.id.chatScroll)
 
         // Get email from shared preferences
         val email = getSharedPreferences("app", MODE_PRIVATE)
@@ -59,7 +55,7 @@ class ChatActivity : AppCompatActivity() {
                     response: Response<ChatResponse>
                 ) {
                     val res = response.body()
-                    val botReply = res?.response ?: "Error: No reply"
+                    val botReply = res?.reply  ?: "Error: No reply"
 
                     chatBox.append("\nBot: $botReply\n")
                     scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }

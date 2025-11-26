@@ -21,7 +21,7 @@ data class ChatRequest(
 )
 
 data class ChatResponse(
-    val response: String?,
+    val reply: String?,
     val documents: List<String>?,
     val error: String?
 )
@@ -34,4 +34,3 @@ interface ApiService {
     @POST("chat")
     fun chat(@Body req: ChatRequest): Call<ChatResponse>
 }
-
