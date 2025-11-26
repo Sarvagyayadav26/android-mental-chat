@@ -1,100 +1,74 @@
 package com.example.mentalhealthchat.ui
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mentalhealthchat.R
+import com.example.mentalhealthchat.ui.ChatRequest
+import com.example.mentalhealthchat.ui.ChatResponse
+import com.example.mentalhealthchat.ui.RetrofitClient
+import com.example.mentalhealthchat.ui.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ChatActivity : AppCompatActivity() {
 
-    private lateinit var chatContainer: LinearLayout
-    private lateinit var chatScroll: ScrollView
+    private lateinit var chatBox: TextView
     private lateinit var inputBox: EditText
     private lateinit var sendBtn: Button
+    private lateinit var scrollView: ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        chatContainer = findViewById(R.id.chatContainer)
-        chatScroll = findViewById(R.id.chatScroll)
+        chatBox = findViewById(R.id.chatBox)
         inputBox = findViewById(R.id.inputBox)
         sendBtn = findViewById(R.id.sendBtn)
+        scrollView = findViewById(R.id.chatScroll)  // ADD THIS ID IN XML (shown below)
 
-        // Load saved email
+        // Get email from shared preferences
         val email = getSharedPreferences("app", MODE_PRIVATE)
-            .getString("email", "")!!
+            .getString("email", null)
+
+        if (email == null) {
+            Toast.makeText(this, "No user email found!", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        val api = RetrofitClient.instance
 
         sendBtn.setOnClickListener {
-            val message = inputBox.text.toString().trim()
 
+            val message = inputBox.text.toString().trim()
             if (message.isEmpty()) return@setOnClickListener
 
-            // Show user message bubble
-            addMessage(message, isUser = true)
-
-            inputBox.setText("")  // clear box
+            chatBox.append("\nYou: $message\n")
 
             val req = ChatRequest(email, message)
 
-            // API call
-            RetrofitClient.instance.chat(req)
-                .enqueue(object : Callback<ChatResponse> {
-                    override fun onResponse(
-                        call: Call<ChatResponse>,
-                        response: Response<ChatResponse>
-                    ) {
-                        val res = response.body()
+            api.chat(req).enqueue(object : Callback<ChatResponse> {
+                override fun onResponse(
+                    call: Call<ChatResponse>,
+                    response: Response<ChatResponse>
+                ) {
+                    val res = response.body()
+                    val botReply = res?.response ?: "Error: No reply"
 
-                        if (res == null) {
-                            addMessage("Error: Empty response", false)
-                            return
-                        }
+                    chatBox.append("\nBot: $botReply\n")
+                    scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+                }
 
-                        if (!res.allowed) {
-                            addMessage("Free limit reached. Please upgrade.", false)
-                            return
-                        }
-
-                        addMessage(res.reply ?: "No reply", false)
-                    }
-
-                    override fun onFailure(call: Call<ChatResponse>, t: Throwable) {
-                        addMessage("Error: ${t.message}", false)
-                    }
-                })
+                override fun onFailure(call: Call<ChatResponse>, t: Throwable) {
+                    chatBox.append("\n[Error: ${t.message}]\n")
+                }
+            })
         }
-    }
-
-    // Chat bubble renderer
-    private fun addMessage(text: String, isUser: Boolean) {
-        val tv = TextView(this)
-        tv.text = text
-        tv.textSize = 16f
-
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        params.setMargins(0, 10, 0, 10)
-
-        if (isUser) {
-            params.gravity = android.view.Gravity.END
-            tv.setBackgroundResource(R.drawable.chat_user)
-        } else {
-            params.gravity = android.view.Gravity.START
-            tv.setBackgroundResource(R.drawable.chat_bot)
-        }
-
-        tv.layoutParams = params
-        tv.setPadding(24, 16, 24, 16)
-
-        chatContainer.addView(tv)
-
-        // Auto scroll to bottom
-        chatScroll.post { chatScroll.fullScroll(ScrollView.FOCUS_DOWN) }
     }
 }

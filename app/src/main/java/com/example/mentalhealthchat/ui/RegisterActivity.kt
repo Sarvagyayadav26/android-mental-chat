@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mentalhealthchat.R
+import com.example.mentalhealthchat.ui.ApiService
+import com.example.mentalhealthchat.ui.RegisterRequest
+import com.example.mentalhealthchat.ui.BasicResponse
+import com.example.mentalhealthchat.ui.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,30 +25,62 @@ class RegisterActivity : AppCompatActivity() {
         val btn = findViewById<Button>(R.id.registerBtn)
 
         btn.setOnClickListener {
-            val email = emailEt.text.toString()
-            val age = ageEt.text.toString().toInt()
-            val sex = sexEt.text.toString()
+
+            val email = emailEt.text.toString().trim()
+            val ageText = ageEt.text.toString().trim()
+            val sex = sexEt.text.toString().trim()
+
+            // Validation
+            if (email.isEmpty() || ageText.isEmpty() || sex.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val age = ageText.toInt()
 
             val req = RegisterRequest(email, age, sex)
 
-            RetrofitClient.instance.register(req).enqueue(object : Callback<RegisterResponse> {
-                override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+            val api = RetrofitClient.instance   // ApiService object
+
+            api.register(req).enqueue(object : Callback<BasicResponse> {
+
+                override fun onResponse(
+                    call: Call<BasicResponse>,
+                    response: Response<BasicResponse>
+                ) {
                     val res = response.body()
 
-                    if (res != null) {
+                    if (response.isSuccessful && res?.success != null) {
 
+                        // Save email locally
                         getSharedPreferences("app", MODE_PRIVATE)
                             .edit()
                             .putString("email", email)
                             .apply()
 
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            "Registered successfully!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                         startActivity(Intent(this@RegisterActivity, ChatActivity::class.java))
                         finish()
+                    } else {
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            res?.error ?: "Registration failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
-                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                    Toast.makeText(this@RegisterActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Error: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         }
