@@ -10,12 +10,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val prefs = getSharedPreferences("app", MODE_PRIVATE)
-        val email = prefs.getString("email", "")
+        val email = prefs.getString("email", null)
 
-        if (email.isNullOrEmpty()) {
-            startActivity(Intent(this, RegisterActivity::class.java))
-        } else {
+        if (email != null) {
+            // User already logged in → go to chat
             startActivity(Intent(this, ChatActivity::class.java))
+        } else {
+            // User not logged in → go to login screen
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
         finish()

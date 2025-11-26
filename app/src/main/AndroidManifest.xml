@@ -15,6 +15,9 @@
         android:theme="@style/Theme.MentalHealthChat"
         android:usesCleartextTraffic="true">
 
+        <!-- Login Activity -->
+        <activity android:name="com.example.mentalhealthchat.ui.LoginActivity" />
+
         <!-- Register Activity -->
         <activity android:name="com.example.mentalhealthchat.ui.RegisterActivity" />
 

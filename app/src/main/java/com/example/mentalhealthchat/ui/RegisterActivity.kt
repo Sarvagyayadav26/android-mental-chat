@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mentalhealthchat.R
@@ -20,28 +21,42 @@ class RegisterActivity : AppCompatActivity() {
         val emailEt = findViewById<EditText>(R.id.emailEt)
         val ageEt = findViewById<EditText>(R.id.ageEt)
         val sexEt = findViewById<EditText>(R.id.sexEt)
-        val btn = findViewById<Button>(R.id.registerBtn)
+        val passwordEt = findViewById<EditText>(R.id.passwordEt)  // <-- add in XML
+        val registerBtn = findViewById<Button>(R.id.registerBtn)
+        val loginText = findViewById<TextView>(R.id.loginText)     // <-- add in XML
 
-        btn.setOnClickListener {
+        // ⬅️ CLICK: Already have an account? Login
+        loginText.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
+        // ⬅️ CLICK: Register Button
+        registerBtn.setOnClickListener {
 
             val email = emailEt.text.toString().trim()
             val ageText = ageEt.text.toString().trim()
             val sex = sexEt.text.toString().trim()
+            val password = passwordEt.text.toString().trim()
 
             // Validation
-            if (email.isEmpty() || ageText.isEmpty() || sex.isEmpty()) {
+            if (email.isEmpty() || ageText.isEmpty() || sex.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val age = ageText.toInt()
 
-            val req = RegisterRequest(email, age, sex)
+            val req = RegisterRequest(
+                email = email,
+                age = age,
+                sex = sex,
+                password = password
+            )
 
-            val api = RetrofitClient.instance   // ApiService object
+            val api = RetrofitClient.instance
 
             api.register(req).enqueue(object : Callback<BasicResponse> {
-
                 override fun onResponse(
                     call: Call<BasicResponse>,
                     response: Response<BasicResponse>
@@ -64,6 +79,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         startActivity(Intent(this@RegisterActivity, ChatActivity::class.java))
                         finish()
+
                     } else {
                         Toast.makeText(
                             this@RegisterActivity,
