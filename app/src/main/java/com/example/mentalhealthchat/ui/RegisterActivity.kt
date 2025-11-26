@@ -2,13 +2,11 @@ package com.example.mentalhealthchat.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mentalhealthchat.R
-import com.example.mentalhealthchat.ui.ApiService
-import com.example.mentalhealthchat.ui.RegisterRequest
-import com.example.mentalhealthchat.ui.BasicResponse
-import com.example.mentalhealthchat.ui.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
