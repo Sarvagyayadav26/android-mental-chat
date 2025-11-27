@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mentalhealthchat"
+    namespace = "com.sarvagya.mentalhealthchat"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mentalhealthchat"
+        applicationId = "com.sarvagya.mentalhealthchat"
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
+        versionCode = 7
         versionName = "1.0"
     }
 
