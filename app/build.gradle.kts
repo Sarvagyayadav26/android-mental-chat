@@ -10,8 +10,8 @@ android {
     defaultConfig {
         applicationId = "com.sarvagya.mentalhealthchat"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 7
+        targetSdk = 35
+        versionCode = 8
         versionName = "1.0"
     }
 
