@@ -1,4 +1,4 @@
-package com.example.mentalhealthchat.ui
+package com.sarvagya.mentalhealthchat.ui
 
 data class ChatResponse(
     val reply: String?,

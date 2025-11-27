@@ -16,17 +16,17 @@
         android:usesCleartextTraffic="true">
 
         <!-- Login Activity -->
-        <activity android:name="com.example.mentalhealthchat.ui.LoginActivity" />
+        <activity android:name="com.sarvagya.mentalhealthchat.ui.LoginActivity" />
 
         <!-- Register Activity -->
-        <activity android:name="com.example.mentalhealthchat.ui.RegisterActivity" />
+        <activity android:name="com.sarvagya.mentalhealthchat.ui.RegisterActivity" />
 
         <!-- Chat Activity -->
-        <activity android:name="com.example.mentalhealthchat.ui.ChatActivity" />
+        <activity android:name="com.sarvagya.mentalhealthchat.ui.ChatActivity" />
 
         <!-- Main Activity (Launcher) -->
         <activity
-            android:name="com.example.mentalhealthchat.ui.MainActivity"
+            android:name="com.sarvagya.mentalhealthchat.ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MentalHealthChat">
 

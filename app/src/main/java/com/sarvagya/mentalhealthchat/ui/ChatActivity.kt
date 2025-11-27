@@ -1,4 +1,4 @@
-package com.example.mentalhealthchat.ui
+package com.sarvagya.mentalhealthchat.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mentalhealthchat.R
+import com.sarvagya.mentalhealthchat.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

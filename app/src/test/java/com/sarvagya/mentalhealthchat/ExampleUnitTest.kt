@@ -1,4 +1,4 @@
-package com.example.mentalhealthchat
+package com.sarvagya.mentalhealthchat
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.mentalhealthchat.ui
+package com.sarvagya.mentalhealthchat.ui
 
 import retrofit2.Call
 import retrofit2.http.Body

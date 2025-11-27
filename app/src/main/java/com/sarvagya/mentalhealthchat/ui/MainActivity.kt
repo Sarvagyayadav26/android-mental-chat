@@ -1,4 +1,4 @@
-package com.example.mentalhealthchat.ui
+package com.sarvagya.mentalhealthchat.ui
 
 import android.content.Intent
 import android.os.Bundle
