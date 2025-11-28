@@ -32,16 +32,19 @@ class ChatActivity : AppCompatActivity() {
         // 🔥 ADD LOGOUT BUTTON
         val logoutBtn = findViewById<Button>(R.id.logoutBtn)
         logoutBtn.setOnClickListener {
-            // Clear saved login data
-            getSharedPreferences("app", MODE_PRIVATE)
-                .edit()
-                .remove("email")
-                .apply()
 
-            // Redirect to login screen
-            startActivity(Intent(this, LoginActivity::class.java))
+            // Clear ALL stored login data
+            val prefs = getSharedPreferences("app", MODE_PRIVATE)
+            prefs.edit().clear().apply()
+
+            // Start LoginActivity and clear activity history
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+
             finish()
         }
+
 
         // Get email from shared preferences
         val email = getSharedPreferences("app", MODE_PRIVATE)

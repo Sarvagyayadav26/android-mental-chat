@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.sarvagya.mentalhealthchat.R
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,17 +22,15 @@ class RegisterActivity : AppCompatActivity() {
         val emailEt = findViewById<EditText>(R.id.emailEt)
         val ageEt = findViewById<EditText>(R.id.ageEt)
         val sexEt = findViewById<EditText>(R.id.sexEt)
-        val passwordEt = findViewById<EditText>(R.id.passwordEt)  // <-- add in XML
+        val passwordEt = findViewById<EditText>(R.id.passwordEt)
         val registerBtn = findViewById<Button>(R.id.registerBtn)
-        val loginText = findViewById<TextView>(R.id.loginText)     // <-- add in XML
+        val loginText = findViewById<TextView>(R.id.loginText)
 
-        // ⬅️ CLICK: Already have an account? Login
         loginText.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
 
-        // ⬅️ CLICK: Register Button
         registerBtn.setOnClickListener {
 
             val email = emailEt.text.toString().trim()
@@ -39,7 +38,6 @@ class RegisterActivity : AppCompatActivity() {
             val sex = sexEt.text.toString().trim()
             val password = passwordEt.text.toString().trim()
 
-            // Validation
             if (email.isEmpty() || ageText.isEmpty() || sex.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -57,33 +55,43 @@ class RegisterActivity : AppCompatActivity() {
             val api = RetrofitClient.instance
 
             api.register(req).enqueue(object : Callback<BasicResponse> {
+
                 override fun onResponse(
                     call: Call<BasicResponse>,
                     response: Response<BasicResponse>
                 ) {
+
                     val res = response.body()
 
                     if (response.isSuccessful && res?.success != null) {
 
-                        // Save email locally
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            res.success,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                         getSharedPreferences("app", MODE_PRIVATE)
                             .edit()
                             .putString("email", email)
                             .apply()
 
-                        Toast.makeText(
-                            this@RegisterActivity,
-                            "Registered successfully!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
                         startActivity(Intent(this@RegisterActivity, ChatActivity::class.java))
                         finish()
 
                     } else {
+
+                        // 🔥 Parse backend error message
+                        val errorJson = response.errorBody()?.string()
+                        val message = try {
+                            JSONObject(errorJson).getString("error")
+                        } catch (e: Exception) {
+                            "Registration failed"
+                        }
+
                         Toast.makeText(
                             this@RegisterActivity,
-                            res?.error ?: "Registration failed",
+                            message,
                             Toast.LENGTH_SHORT
                         ).show()
                     }

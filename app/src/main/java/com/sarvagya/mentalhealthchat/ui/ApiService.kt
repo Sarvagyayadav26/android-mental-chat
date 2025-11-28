@@ -18,5 +18,6 @@ interface ApiService {
     fun login(@Body req: LoginRequest): Call<LoginResponse>
 
     @POST("chat")
-    fun chat(@Body req: ChatRequest): Call<ChatResponse>
+    fun chat(@Body request: ChatRequest): Call<ChatResponse>
+
 }

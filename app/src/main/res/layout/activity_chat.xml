@@ -5,15 +5,20 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Logout button -->
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="wrap_content"
+    <!-- Logout button aligned to right -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:layout_gravity="end"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp" />
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"/>
+    </LinearLayout>
 
     <!-- Chat output box -->
     <ScrollView
